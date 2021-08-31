@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Mainpage.카페음료리뷰/?login=true</title>
+    <h2 style="margin-left:170px">카페음료리뷰에 오신 것을 환영합니다.</h2>
+
+</head>
+<body style= "margin-left:220px;margin-top:70px;">
+    <nav style="margin-left:740px" id="top_menu">
+   
+                <div style="margin-left:40px;"><b id="userName"></b>님 환영합니다.</td>    
+                <input button type="button" value='로그아웃' onClick="location.href='main.html'">  
+                </div>
+       
+              
+            
+        </table>    
+    </nav>
+    <button class="btm_img" id="img_btn" onclick="a()"><img src="그림1.png" width="30" height="10">스타벅스</button>
+    <button class="btm_img" id="img_btn" onclick="b()"><img src="그림2.jpg" width="30" height="10">투썸플레이스</button>
+    <button class="btm_img" id="img_btn" onclick="c()"><img src="그림3.png" width="30" height="10">엔제리너스</button>
+    <button class="btm_img" id="img_btn" onclick="d()"><img src="그림4.jpg" width="30" height="10">이디야</button>
+    <button class="btm_img" id="img_btn" onclick="e()"><img src="그림5.jpeg" width="30" height="10">빽다방</button> <br> <br>
+    <button class="btm_img" id="img_btn" onclick="f()"><img src="그림6.jpg.crdownload" width="30" height="10">설빙</button>
+    <button class="btm_img" id="img_btn" onclick="g()"><img src="그림7.jpg" width="30" height="10">공차</button>
+    <button class="btm_img" id="img_btn" onclick="g()"><img src="그림8.jpg" width="30" height="10">탐앤탐스</button>
+    <button class="btm_img" id="img_btn" onclick="g()"><img src="그림9.jpg" width="30" height="10">메가커피</button>
+</body>
+<script>
+     function a()
+    {
+        location.href='list.html'
+    }
+    function b()
+    {
+        location.href='list.html'
+    }
+    function c()
+    {
+        location.href='list.html'
+    }
+    function d()
+    {
+        location.href='list.html'
+    }
+    function e()
+    {
+        location.href='list.html'
+    }
+    function f()
+    {
+        location.href='list.html'
+    }
+    function g()
+    {
+        location.href='list.html'
+    }
+
+    // loginCheck();
+    helloUser();
+    
+
+    function helloUser(){
+        let user = document.querySelector('#userName');
+        let span = document.createElement("span");
+        var usr = JSON.parse(sessionStorage.getItem('__login__'));
+        console.log(usr.pw, usr.id);
+
+        user.appendChild(span);
+        span.innerText = usr.id;      
+    }
+
+    function loginCheck() {
+      var userName =  sessionStorage.getItem(id); // userName 이라는 변수를 선언하여 세션스토리지내에서 id 값을 가져온다
+      
+      
+      user = JSON.parse(userName);  // 아닐경우 , JSON 문자열의 userName을 분석하고, 그 결과에서 JavaScript 값이나 객체를 생성// 
+          
+    }
+
+    function setUserName() {  //함수 선언
+    
+        document.getElementById("userName").innerText = id  // userNme의 값을 출력한다.
+    }
+ 
+</script>
+</html>
+
+
