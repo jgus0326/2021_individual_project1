@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<title>카페 음료 리뷰</title>
+
+
+<body>
+
+  <div style="width: 500px;margin: 0 auto;">
+    <a href="login_end.html"><h2 style="font-family: 'Dongle-Regular'; font-size:55px;">카페 음료 리뷰</h2></a>
+  </div>
+<div style="width: 500px;  border:3px solid yellow ;margin: 0 auto;">
+  <table>
+  <tr>
+    <th style="width:80px;font-family: 'Dongle-Regular'; font-size:22px;">이름 :</th>
+    <td><p id="menu"></p></td>
+  </tr>
+  <tr>
+    <th  style="font-family: 'Dongle-Regular'; font-size:22px;">작성자 :</th>
+    <td><p id="userName"></p></td>
+  </tr>
+  <tr>
+    <th style="font-family: 'Dongle-Regular'; font-size:22px;">작성일 :</th>
+    <td><p id="write_date"></p></td>
+  </tr>
+  <tr>
+    <th  style="font-family: 'Dongle-Regular'; font-size:22px;"> 내용 :</th>
+    <td>
+      <pre id=contents></pre>
+    </td>   
+  </tr>
+  <tr>
+    <th  style="font-family: 'Dongle-Regular'; font-size:22px;"> 이미지 :</th>
+    <td>
+      <img id="viewimg" width="100%"/>
+    </td>   
+  </tr>
+
+
+</table>
+</div>
+
+<div style="width: 500px; margin: 0 auto; padding-top:20px">
+  <input button type="button" value='목록' onClick="goList()">
+  <div style='width:80px;float: right;'>
+    <button onclick="removeContent()">삭제</button>
+  </div>
+  <div style='width:50px;float: right;'>
+    <button onclick="modify()">수정</button>
+  </div>
+</div>
+ 
+</body>
+
+ 
+
+<script>
+  helloUser();
+    
+    function helloUser(){
+        let user = document.querySelector('#userName');
+        let span = document.createElement("span");
+        var usr = JSON.parse(sessionStorage.getItem('__login__'));
+        console.log(usr.pw, usr.id);
+
+        user.appendChild(span);
+        span.innerText = usr.id;      
+    }
+
+  function goList(){
+    location.href='list.html?brand=' + getParameterByName('brand');
+  }
+  
+  getContents();
+  function getContents() {
+  var contents = JSON.parse(
+    localStorage.getItem("contents" + getParameterByName("brand"))
+  );
+  console.log("contents: ", contents);
+  if (!contents) {
+    contents = [];
+  }
+  var content = contents[getParameterByName("no") - 1];
+  console.log("content: ", content);
+  console.log("content: ", content.menu);
+  console.log("content: ", content.writer);
+
+  const menu = document.getElementById("menu");
+  menu.innerText = content.menu;
+  // document.getElementById("writer").innerText = content.writer;
+  document.getElementById("contents").innerText = content.contents;
+  var write_date = content.write_date;
+  var date = write_date.substr(0, 10);
+  document.getElementById("write_date").innerText = date;
+  document.getElementById("viewimg").src=content.srcimg;
+}
+  function modify() {
+      if (confirm('수정하시겠습니까?')) {
+      location.href = 'modify.html?brand=' + getParameterByName('brand') + '&no='+getParameterByName('no');
+    } else{
+      return;
+    }
+  }
+  function removeContent() {
+    if (!confirm('삭제하시겠습니까?')){
+
+      return;
+    }
+    var contents = JSON.parse(localStorage.getItem("contents"+getParameterByName('brand')));
+    contents.splice(getParameterByName('no')-1,1);
+    localStorage.setItem("contents"+getParameterByName('brand') , JSON.stringify(contents));
+    location.href = 'list.html';
+  }
+  function getParameterByName(name) { 
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]"); 
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex.exec(location.search); 
+    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " ")); }
+</script>
+</html>
