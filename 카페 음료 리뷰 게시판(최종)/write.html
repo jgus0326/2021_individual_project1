@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>카페 음료 리뷰</title>
+
+</head>
+<body style="margin-left:300px;">
+       <a href="login_end.html"><h2 style= "font-size: 70px;">카페 음료 리뷰</h2></a>
+    <div style="width:723px; text-align: right;">
+        <label for="brand" style ="font-size: 31px;">브랜드 선택</label>
+        <select name="brand" id="brand">
+            <option value="1">스타벅스</option>
+            <option value="2">투썸플레이스</option>
+            <option value="3">엔제리너스</option>
+            <option value="4">이디야</option>
+            <option value="5">빽다방</option>
+            <option value="6">설빙</option>
+            <option value="7">공차</option>
+            <option value="8">탐앤탐스</option>
+            <option value="9">메가커피</option>
+            <option value="10">공차</option>
+        </select>
+    </div> 
+        <tr>
+            <td><b style= "font-size:28px">작성자 : </b><b id="userName" style="font-size:30px"></b></td> 
+        </tr>
+    </br>
+        <tr>
+            <td><input type="text" id="menu" name="menu" placeholder="이름"></td>
+        </tr>
+    <br>
+        <tr>
+            <td><textarea rows="15" cols="100" type="text" id="contents" name="contents" placeholder="내용을 입력하세요."></textarea>
+            </td>
+        </tr>
+        <br/>
+        <input type="text" id="srcimg" placeholder="이미지 주소를 입력하세요."><br/>
+            <div class="image-cont" style="padding:10px; height: 250px; width: 400px;" ></br>
+                <img style="height: auto; width: 250px;" id="prev_img" src="no.PNG";>
+                <input style="display: block; height:max-content;" type="file" accept="image/*" id="input_image" name="input_image" >
+            </div>
+            <p id="demo"></p>
+            <div style="width:723px; text-align: right;">
+        <button onclick="window.history.back()">취소</button>
+        <button onclick="save()">작성</button>
+    </div>
+    </body>
+<script>
+    helloUser()
+    function helloUser(){
+        let user = document.querySelector('#userName');
+        let span = document.createElement("span");
+        var usr = JSON.parse(sessionStorage.getItem('__login__'));
+        console.log(usr.pw, usr.id);
+
+        user.appendChild(span);
+        span.innerText = usr.id;      
+    }
+    function readImage(input) {
+        var img= document.getElementById("input_image").src;
+        document.getElementById("demo").innerHTML = img;
+
+    if(input.files && input.files[0]) {
+        const reader = new FileReader()
+        reader.onload = e => {
+            const previewImage = document.getElementById("prev_img")
+            previewImage.src = e.target.result
+        }
+        reader.readAsDataURL(input.files[0])
+
+    }
+}
+    const inputImage = document.getElementById("input_image")
+    inputImage.addEventListener("change", e => {
+    readImage(e.target)
+})
+
+    function save() {
+      if (!confirm('저장하시겠습니까?')) {
+        return;
+      }
+      var brand = document.getElementById("brand").value;
+
+      var contents = JSON.parse(localStorage.getItem("contents"+brand));
+      if (!contents) {
+          contents = [];
+        }
+      var srcimg = document.getElementById('srcimg').value;
+      var menu = document.getElementById('menu').value;
+      var writer = JSON.parse(sessionStorage.getItem('__login__'));
+      var content = document.getElementById('contents').value;
+      contents.push({no:contents.length+1
+        , srcimg:srcimg
+        , brand:brand
+        , menu:menu
+        , writer:writer
+        , contents:content
+        , write_date:new Date()});
+      localStorage.setItem("contents"+brand, JSON.stringify(contents));
+  
+      alert('저장되었습니다.');
+      location.href = 'list.html?brand='+brand;
+    }
+  </script>
+</html>
