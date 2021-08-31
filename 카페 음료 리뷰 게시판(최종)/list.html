@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html>
+  <header>
+    <title>카페 음료 리뷰</title>
+
+<style>
+  td, th {
+          border:solid 1px;
+          font-size:22px;
+        } 
+  table {border-collapse: collapse;}
+</style>
+<div style="text-align:center;font-size:30px">
+  <a href="login_end.html"><h2>카페 음료 리뷰</h2></a>
+</div>
+</header>
+
+<body style="
+width: 1000px;
+margin-left: 140px;
+margin-top: 50px;
+">
+  <label for="brand" style= "font-size:28px;">브랜드 선택</label>
+  <select id="brand" onchange="changeBrand()">
+      <option value="1">스타벅스</option>
+      <option value="2">투썸플레이스</option>
+      <option value="3">엔제리너스</option>
+      <option value="4">이디야</option>
+      <option value="5">빽다방</option>
+      <option value="6">설빙</option>
+      <option value="7">공차</option>
+      <option value="8">탐앤탐스</option>
+      <option value="9">메가커피</option>
+      <option value="10">공차</option>
+  </select>
+  <div style="width:100%; text-align: right;">
+    <button onclick="moveForm()">작성하기</button>
+  </div>
+<table style="width:100%">
+  <tr>
+    <th>번호</th>
+    <th>이름</th>
+    <th>작성자</th>
+    <th>작성일</th>
+  </tr>
+  <tbody id="rows">
+      <tr>
+          <th>번호</th>
+          <th>이름</th>
+          <th>작성자</th>
+          <th>작성일</th>
+        </tr>
+        <tr>
+            <th>번호</th>
+            <th>이름</th>
+            <th>작성자</th>
+            <th>작성일</th>
+          </tr>
+  </tbody>
+</table>
+
+
+</body>
+<script>
+  const url = new URL(location.href);
+  
+  const urlParams = url.searchParams;
+
+  var sel = document.getElementById("brand");
+    for(var i=0; i<sel.length; i++){
+      if(sel[i].value==urlParams.get('brand')){
+            sel[i].selected = true;
+        }
+    }
+
+    changeBrand();
+
+
+  var brand = document.getElementById('brand').value;
+  console.log(brand)
+  var contentList = JSON.parse(localStorage.getItem("contents"+brand));
+
+  drawRows();
+  function moveForm() {
+    location.href = 'write.html'
+  }
+
+  function drawRows() {
+    var templates = '';
+    var body = document.getElementById('rows');
+
+    if (contentList) {
+      for (var i=contentList.length-1; 0<=i; i--) {
+        var content  = contentList[i];
+        console.log(content);
+        templates += '<tr onclick="moveView('+content.brand+','+i+')">';
+        templates += '<td style="text-align:center">'+(i+1)+'</td>';
+        templates += '<td style="text-align:center">' +content.menu+'</td>';
+        templates += '<td style="text-align:center" id="userName"></td>';
+        templates += '<td style="text-align:center">'+toStringByFormatting(new Date(content.write_date))+'</td>';
+        templates += '</tr>';
+      }
+    }
+
+    body.innerHTML = templates;
+  }
+   helloUser()
+
+
+    function helloUser(){
+        var user = document.querySelector('#userName');
+        var span = document.createElement("span");
+        var usr = JSON.parse(sessionStorage.getItem('__login__'));
+        console.log(usr.pw, usr.id);
+
+        user.appendChild(span);
+        span.innerText = usr.id;      
+    }
+
+
+
+
+  function moveView(brand, contentNo) {
+    location.href = 'view.html?brand=' + brand + '&no='+(contentNo+1);
+  }
+
+  function changeBrand() {
+    var brand = document.getElementById('brand').value;
+    
+    contentList = JSON.parse(localStorage.getItem("contents"+brand));
+    drawRows();
+  }
+
+  function leftPad(value) { if (value >= 10) { return value; } 
+  return `0${value}`; } 
+  function toStringByFormatting(source, delimiter = '-') {
+    const year = source.getFullYear();
+    const month = leftPad(source.getMonth() + 1);
+    const day = leftPad(source.getDate());
+    return [year, month, day].join(delimiter); }
+</script>
+</html>
