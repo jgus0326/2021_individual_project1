@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>카페 음료 리뷰</title>
+
+</head>
+<body style="margin-left:300px;">
+    <a href="login_end.html"><h2 style= "font-size: 50px;">카페 음료 리뷰</h2></a>
+    
+<div>
+        <tr>
+            <td><b style= "font-size:28px">작성자 : </b><b id="userName" style="font-size:30px"></b></td> 
+           
+        </tr>
+    </br>
+        <tr>
+            <td><input type="text" id="menu" name="menu" placeholder="이름"></td>
+        </tr>
+    </br>
+        <tr>
+            <td><textarea rows="15" cols="100" type="text" id="contents" name="contents" placeholder="내용을 입력하세요."></textarea>
+              </tr>
+              <br/>
+        <input type="text" id="srcimg" placeholder="이미지 주소를 입력하세요."><br/>
+            </br>
+            <div class="image-cont" style="padding:10px; height: 250px; width: 400px;" >
+                <img style="height: auto; width: 250px;" id="prev_img" src="no.PNG";>
+                <input style="display: block; height:max-content;" type="file" accept="image/*" id="input_image" name="input_image" >
+            </div>
+            <p id="demo"></p>
+        <div style="width:723px; text-align: right;">
+            <!-- <div style="width:100%; text-align: right;"> -->
+                 <button onclick="window.history.back()">취소</button>
+                 <button onclick="save()">수정</button>
+         </div>
+</div>
+</div> 
+    </body>
+<script>
+  helloUser()
+    function helloUser(){
+        let user = document.querySelector('#userName');
+        let span = document.createElement("span");
+        var usr = JSON.parse(sessionStorage.getItem('__login__'));
+        console.log(usr.pw, usr.id);
+
+        user.appendChild(span);
+        span.innerText = usr.id;      
+    }
+
+    function readImage(input) {
+        var img= document.getElementById("input_image").src;
+        document.getElementById("demo").innerHTML = img;
+
+    if(input.files && input.files[0]) {
+        const reader = new FileReader()
+        reader.onload = e => {
+            const previewImage = document.getElementById("prev_img")
+            previewImage.src = e.target.result
+        }
+        reader.readAsDataURL(input.files[0])
+
+    }
+}
+    const inputImage = document.getElementById("input_image")
+    inputImage.addEventListener("change", e => {
+    readImage(e.target)
+})
+    getContents();
+    function getContents() {
+    var contents = JSON.parse(localStorage.getItem("contents"+getParameterByName('brand')));
+    if (!contents) {
+      contents = [];
+    }
+    var content = contents  [getParameterByName('no')-1];
+    document.getElementById('menu').value = content.menu;
+    document.getElementById('srcimg').value = content.srcimg ? content.srcimg  : '';
+    // document.getElementById('writer').value = content.writer;
+    document.getElementById('contents').value = content.contents;
+  }
+
+  function getParameterByName(name) { 
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]"); 
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex.exec(location.search); 
+    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " ")); }
+    function goList(){
+        location.href='list.html?brand=' + getParameterByName('brand');
+        }
+
+    function save() {
+      if (!confirm('수정하시겠습니까?')) {
+        return;
+      }
+
+        var nolist = JSON.parse(localStorage.getItem("contents" + getParameterByName("brand")));
+        var brand = getParameterByName('brand');
+        var content = nolist[getParameterByName("no") - 1];
+        var no = content.no;
+        
+        var contents = JSON.parse(localStorage.getItem("contents"+brand));
+      if (!contents) {
+          contents = [];
+        }
+      var srcimg = document.getElementById('srcimg').value;
+      var menu = document.getElementById('menu').value;
+      // var writer = document.getElementById('writer').value;
+      var content = document.getElementById('contents').value;
+
+      contents[getParameterByName('no')-1]={no:no
+        , srcimg:srcimg
+        , brand:brand
+        , menu:menu
+        , contents:content
+        , write_date:new Date()};
+      localStorage.setItem("contents"+brand, JSON.stringify(contents));
+  
+      alert('수정되었습니다.');
+      goList();
+    }
+  </script>
+</html>
